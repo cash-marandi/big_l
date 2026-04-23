@@ -1,102 +1,51 @@
 "use client";
 
-import { useRef, useEffect, useState, useCallback } from "react";
+import { useRef, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { gsap } from "gsap";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import Link from "next/link";
 
-interface Blob {
-  x: number;
-  y: number;
-  radius: number;
-  opacity: number;
-}
-
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [isHovering, setIsHovering] = useState(false);
-  const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
-  const [blobCircles, setBlobCircles] = useState<Blob[]>([]);
-  const mouseRef = useRef({ x: -1000, y: -1000 });
-  const rafRef = useRef<number>(0);
-  const blobStatesRef = useRef<Blob[]>([]);
+  const beforeImageRef = useRef<HTMLDivElement>(null);
+  const mousePos = useRef({ x: 50, y: 50 });
+  const rafId = useRef<number>(0);
 
-  // Initialize blob positions
-  useEffect(() => {
-    const initialBlobs: Blob[] = Array.from({ length: 20 }, () => ({
-      x: -1000,
-      y: -1000,
-      radius: 80 + Math.random() * 100,
-      opacity: 0,
-    }));
-    blobStatesRef.current = initialBlobs;
-    setBlobCircles(initialBlobs);
-  }, []);
-
-  // Animation loop for blob positions
-  useEffect(() => {
-    let time = 0;
+  const updateMask = useCallback(() => {
+    if (!beforeImageRef.current) return;
+    const x = mousePos.current.x;
+    const y = mousePos.current.y;
     
-    const animate = () => {
-      time += 0.016;
-      const mx = mouseRef.current.x;
-      const my = mouseRef.current.y;
-      const isActive = mx > 0;
-
-      const updatedBlobs = blobStatesRef.current.map((blob, i) => {
-        const angle = time * 2 + (i / 20) * Math.PI * 2;
-        const offsetRadius = isActive ? 120 : 0;
-        
-        let targetX = mx + Math.cos(angle) * offsetRadius * (0.5 + i * 0.05);
-        let targetY = my + Math.sin(angle * 0.8) * offsetRadius * (0.5 + i * 0.05);
-        
-        // Natural floating when no mouse
-        if (!isActive) {
-          targetX = -1000;
-          targetY = -1000;
-        }
-
-        // Smooth lerp
-        const lerp = 0.08;
-        const newX = blob.x + (targetX - blob.x) * lerp;
-        const newY = blob.y + (targetY - blob.y) * lerp;
-        
-        // Fade in/out based on mouse activity
-        const targetOpacity = isActive ? 1 : 0;
-        const newOpacity = blob.opacity + (targetOpacity - blob.opacity) * 0.05;
-
-        return {
-          ...blob,
-          x: newX,
-          y: newY,
-          opacity: newOpacity,
-        };
-      });
-
-      blobStatesRef.current = updatedBlobs;
-      setBlobCircles([...updatedBlobs]);
-
-      rafRef.current = requestAnimationFrame(animate);
-    };
-
-    rafRef.current = requestAnimationFrame(animate);
-
-    return () => {
-      cancelAnimationFrame(rafRef.current);
-    };
+    // Create multiple overlapping circles for blob effect
+    const circles = [];
+    for (let i = 0; i < 8; i++) {
+      const angle = (Date.now() / 1000) + (i / 8) * Math.PI * 2;
+      const offsetX = Math.cos(angle) * 3;
+      const offsetY = Math.sin(angle * 0.7) * 3;
+      const size = 12 + Math.sin(angle + i) * 3;
+      circles.push(`circle(${size}% at ${x + offsetX}% ${y + offsetY}%)`);
+    }
+    
+    const clipPath = circles.join(", ");
+    beforeImageRef.current.style.clipPath = clipPath;
+    
+    rafId.current = requestAnimationFrame(updateMask);
   }, []);
+
+  useEffect(() => {
+    rafId.current = requestAnimationFrame(updateMask);
+    return () => cancelAnimationFrame(rafId.current);
+  }, [updateMask]);
 
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
-    mouseRef.current = { x: e.clientX, y: e.clientY };
-    setCursorPos({ x: e.clientX, y: e.clientY });
+    const rect = containerRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    mousePos.current = {
+      x: ((e.clientX - rect.left) / rect.width) * 100,
+      y: ((e.clientY - rect.top) / rect.height) * 100,
+    };
   }, []);
-
-  const handleMouseEnter = () => setIsHovering(true);
-  const handleMouseLeave = () => {
-    setIsHovering(false);
-    mouseRef.current = { x: -1000, y: -1000 };
-  };
 
   // GSAP entrance animations
   useEffect(() => {
@@ -144,36 +93,14 @@ export default function Hero() {
     }
   };
 
-  // Build clip-path string from blobs
-  const buildClipPath = () => {
-    if (!blobCircles.length) return "circle(0% at 50% 50%)";
-    
-    const activeBlobs = blobCircles.filter(b => b.opacity > 0.01 && b.x > -100);
-    if (activeBlobs.length === 0) return "circle(0% at 50% 50%)";
-    
-    const vw = window.innerWidth;
-    const vh = window.innerHeight;
-    
-    const circles = activeBlobs.map(blob => {
-      const cx = ((blob.x / vw) * 100).toFixed(1);
-      const cy = ((blob.y / vh) * 100).toFixed(1);
-      const r = ((blob.radius / Math.min(vw, vh)) * 100).toFixed(1);
-      return `circle(${r}% at ${cx}% ${cy}%)`;
-    });
-    
-    return circles.join(", ");
-  };
-
   return (
     <section
       ref={containerRef}
       className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[var(--earth-dark)]"
       onMouseMove={handleMouseMove}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
     >
-      {/* Layer 1: Completed Project (hero_after.png) - Always visible underneath */}
-      <div className="absolute inset-0 z-0">
+      {/* Layer 1: Completed Project (hero_after.png) - Always visible */}
+      <div className="absolute inset-0">
         <Image
           src="/images/hero_after.png"
           alt="Completed construction project"
@@ -187,10 +114,10 @@ export default function Hero() {
 
       {/* Layer 2: Construction Phase (hero_before.png) - Revealed by clip-path */}
       <div
-        className="absolute inset-0 z-[1] transition-all duration-75"
+        ref={beforeImageRef}
+        className="absolute inset-0"
         style={{
-          clipPath: buildClipPath(),
-          WebkitClipPath: buildClipPath(),
+          clipPath: "circle(0% at 50% 50%)",
         }}
       >
         <Image
@@ -202,19 +129,6 @@ export default function Hero() {
           sizes="100vw"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-[var(--earth-dark)]/70 via-[var(--earth-dark)]/30 to-[var(--earth-dark)]/80" />
-      </div>
-
-      {/* Custom Cursor */}
-      <div
-        className="fixed pointer-events-none z-50 w-12 h-12 rounded-full border-2 border-white/60 flex items-center justify-center transition-all duration-150 mix-blend-difference"
-        style={{
-          left: cursorPos.x - 24,
-          top: cursorPos.y - 24,
-          opacity: isHovering ? 1 : 0,
-          transform: isHovering ? "scale(1)" : "scale(0)",
-        }}
-      >
-        <div className="w-2 h-2 bg-white rounded-full" />
       </div>
 
       {/* Grain Overlay */}
@@ -283,15 +197,6 @@ export default function Hero() {
             </div>
           </div>
         </div>
-      </div>
-
-      {/* Hover Instruction */}
-      <div 
-        className={`absolute bottom-24 left-1/2 -translate-x-1/2 transition-opacity duration-500 pointer-events-none z-10 ${isHovering ? 'opacity-0' : 'opacity-100'}`}
-      >
-        <span className="text-white/70 text-sm font-medium animate-pulse">
-          Move cursor to reveal the transformation
-        </span>
       </div>
 
       {/* Scroll Indicator */}
