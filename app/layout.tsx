@@ -15,9 +15,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Big L Civils | Civil Engineering Excellence in Nelspruit",
-  description: "Big L Civils is a premier civil engineering company based in Nelspruit, specializing in residential construction, infrastructure development, and civil works across Mpumalanga.",
-  keywords: "civil engineering, construction, Nelspruit, Mpumalanga, residential construction, infrastructure, Big L Civils",
+  title: "Select Group (Pty) Ltd | Civil & Structural Engineering Consultants",
+  description: "Select Group is a premier Consulting Civil and Structural Engineering firm based in Nelspruit, Mpumalanga. Registered with ECSA and NHBRC, providing professional engineering solutions across Mpumalanga, KwaZulu-Natal, Gauteng, and Limpopo.",
+  keywords: "civil engineering, structural engineering, consulting engineer, ECSA registered, Nelspruit, Mpumalanga, engineering consultancy, Select Group",
 };
 
 export default function RootLayout({

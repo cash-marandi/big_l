@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { Phone, Mail, MapPin, ArrowUp } from "lucide-react";
 
 // Custom social icons as SVG components
@@ -43,16 +44,17 @@ export default function Footer() {
           {/* Company Info */}
           <div className="lg:col-span-1">
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 bg-[var(--clay-brown)] rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xl">L</span>
-              </div>
-              <div>
-                <h3 className="font-bold text-xl">Big L Civils</h3>
-                <p className="text-white/60 text-sm">Building Tomorrow</p>
+              <div className="w-40 h-16 relative">
+                <Image
+                  src="/images/logo.png"
+                  alt="Select Group"
+                  fill
+                  className="object-contain"
+                />
               </div>
             </div>
             <p className="text-white/70 text-sm leading-relaxed mb-6">
-              Premier civil engineering company based in Nelspruit, delivering excellence in residential construction and infrastructure development across Mpumalanga.
+              Premier Consulting Civil and Structural Engineering firm based in Nelspruit, registered with ECSA and NHBRC.
             </p>
             <div className="flex gap-4">
               <a
@@ -105,12 +107,12 @@ export default function Footer() {
             <h4 className="font-bold text-lg mb-6 text-[var(--sand-beige)]">Services</h4>
             <ul className="space-y-3">
               {[
-                "Residential Construction",
-                "Commercial Buildings",
-                "Infrastructure Development",
-                "Road Construction",
-                "Earthworks & Grading",
-                "Concrete Works",
+                "Civil Engineering",
+                "Structural Engineering",
+                "Project Management",
+                "Building Design",
+                "Infrastructure",
+                "Geotechnical",
               ].map((service) => (
                 <li key={service}>
                   <Link
@@ -131,7 +133,7 @@ export default function Footer() {
               <li className="flex items-start gap-3">
                 <MapPin className="w-5 h-5 text-[var(--clay-brown)] flex-shrink-0 mt-0.5" />
                 <span className="text-white/70 text-sm">
-                  123 Main Street<br />
+                  Suite 108, Nelmed Building<br />
                   Nelspruit, Mpumalanga<br />
                   South Africa
                 </span>
@@ -139,19 +141,19 @@ export default function Footer() {
               <li className="flex items-center gap-3">
                 <Phone className="w-5 h-5 text-[var(--clay-brown)] flex-shrink-0" />
                 <a
-                  href="tel:+27123456789"
+                  href="tel:+27133470200"
                   className="text-white/70 hover:text-[var(--sand-beige)] transition-colors duration-300 text-sm"
                 >
-                  +27 12 345 6789
+                  +27 13 347 0200
                 </a>
               </li>
               <li className="flex items-center gap-3">
                 <Mail className="w-5 h-5 text-[var(--clay-brown)] flex-shrink-0" />
                 <a
-                  href="mailto:info@biglcivils.co.za"
+                  href="mailto:info@selectgroup.co.za"
                   className="text-white/70 hover:text-[var(--sand-beige)] transition-colors duration-300 text-sm"
                 >
-                  info@biglcivils.co.za
+                  info@selectgroup.co.za
                 </a>
               </li>
             </ul>
@@ -163,8 +165,19 @@ export default function Footer() {
       <div className="relative z-10 border-t border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-white/50 text-sm">
-            © {new Date().getFullYear()} Big L Civils. All rights reserved.
+            © {new Date().getFullYear()} Select Group (Pty) Ltd. All rights reserved.
           </p>
+          <div className="flex items-center gap-4 text-sm">
+            <span className="text-white/50">Built by</span>
+            <a 
+              href="https://www.livelonke.co.za" 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-white/70 hover:text-[var(--sand-beige)] font-medium transition-colors"
+            >
+              Live Lonke ICT
+            </a>
+          </div>
           <div className="flex items-center gap-6">
             <Link href="#" className="text-white/50 hover:text-white/70 text-sm transition-colors">
               Privacy Policy

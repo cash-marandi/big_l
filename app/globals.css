@@ -1,21 +1,21 @@
 @import "tailwindcss";
 
 :root {
-  /* Construction Colors - Earth & Infrastructure Theme */
-  --clay-brown: #8B4513;
-  --clay-brown-dark: #5D2E0C;
-  --clay-brown-light: #A0522D;
-  --sand-beige: #D4A574;
-  --sand-light: #E8D4C0;
-  --sand-dark: #B8956A;
+  /* Select Group Theme - Red/Maroon */
+  --clay-brown: #B22222;
+  --clay-brown-dark: #800000;
+  --clay-brown-light: #CD5C5C;
+  --sand-beige: #E6AAAA;
+  --sand-light: #FFF0F0;
+  --sand-dark: #CC4444;
   --forest-green: #2D5016;
   --forest-dark: #1A3009;
   --forest-light: #4A7C2A;
-  --warm-white: #F8F5F0;
-  --warm-cream: #FDF9F3;
-  --earth-dark: #3D2914;
-  --stone-gray: #6B7280;
-  --stone-light: #9CA3AF;
+  --warm-white: #FFF8F8;
+  --warm-cream: #FFF5F5;
+  --earth-dark: #1A0505;
+  --stone-gray: #8B6969;
+  --stone-light: #B89E9E;
   
   --background: var(--warm-white);
   --foreground: var(--earth-dark);

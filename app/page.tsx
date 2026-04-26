@@ -2,7 +2,10 @@ import Hero from "@/components/sections/Hero";
 import About from "@/components/sections/About";
 import Services from "@/components/sections/Services";
 import Portfolio from "@/components/sections/Portfolio";
-import News from "@/components/sections/News";
+import WhyChooseUs from "@/components/sections/WhyChooseUs";
+import ClientLogos from "@/components/sections/ClientLogos";
+import ContactCTA from "@/components/sections/ContactCTA";
+import CTABanner from "@/components/sections/CTABanner";
 
 export default function Home() {
   return (
@@ -10,8 +13,11 @@ export default function Home() {
       <Hero />
       <About />
       <Services />
+      <WhyChooseUs />
       <Portfolio />
-      <News />
+      <ClientLogos />
+      <CTABanner />
+      <ContactCTA />
     </>
   );
 }

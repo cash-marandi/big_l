@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 
 export default function Navigation() {
@@ -46,24 +47,13 @@ export default function Navigation() {
             href="/"
             className="flex items-center gap-2 group"
           >
-            <div className="w-10 h-10 bg-[var(--clay-brown)] rounded-lg flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300">
-              <span className="text-white font-bold text-lg">L</span>
-            </div>
-            <div className="flex flex-col">
-              <span
-                className={`font-bold text-lg leading-tight transition-colors duration-300 ${
-                  isScrolled ? "text-[var(--earth-dark)]" : "text-white"
-                }`}
-              >
-                Big L Civils
-              </span>
-              <span
-                className={`text-xs transition-colors duration-300 ${
-                  isScrolled ? "text-[var(--stone-gray)]" : "text-white/70"
-                }`}
-              >
-                Nelspruit
-              </span>
+            <div className="w-32 h-12 relative">
+              <Image
+                src="/images/logo.png"
+                alt="Select Group"
+                fill
+                className="object-contain"
+              />
             </div>
           </Link>
 
